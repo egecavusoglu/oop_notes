@@ -187,7 +187,7 @@ Define a family of algorithms that are interchangeable at run-time. Decouples cl
 
 ### Object Modeling Technique (OMT)
 
-![Strategy Pattern OMT](strategy-pattern-omt.png)
+![Strategy Pattern OMT](./assets/strategy-pattern-omt.png)
 
 - Italicised are **abstract base class**. (eg. _Strategy_)
   - _AlgorithmInterface()_ is a pure virtual member function.
