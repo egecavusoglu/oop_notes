@@ -191,3 +191,90 @@ Define a family of algorithms that are interchangeable at run-time. Decouples cl
 
 - Italicised are **abstract base class**. (eg. _Strategy_)
   - _AlgorithmInterface()_ is a pure virtual member function.
+- Triangle represents **inheritance**.
+- Boxes not italicised represent **classes**.
+- Diamond represents **composition**.
+
+## Visitor Pattern
+
+**Goal**:Separate an algorithm from the objects it operates on. Allows adding new operations to existing objects without modifying the objects.
+
+**Core Solution**: A visitor implements specializations of a given function for each concrete class in a family of classes. The visitor is passed a pointer to the object it is defining an operation for, giving the visitor access to the object. The visitor makes use of double dispatch, a form of delegation.
+
+- **Delegation**: execute a member function of one object (receiver) using the state of another object (sender). The receiver member function is passed a pointer to the sender, giving it access to the sender’s state.
+
+- **Double dispatch**: dispatches a function call to different concrete functions depending on the runtime types of two objects involved in the call
+
+### Participants
+
+1. Visitor - declares a Visit operation for each class of ConcreteElement in the object structure. The operation’s name and signature identifies the class that sends the Visit request to the visitor. That lets the visitor determine the concrete class of the element being visited.
+2. ConcreteVisitor - implements each operation declared by Visitor. Each operation implements a fragment of the algorithm defined for the corresponding class of object in the structure.
+3. Element - declares an Accept operation that takes a visitor as an argument.
+4. ConcreteElement - implements an Accept operation that takes a visitor as an argument.
+5. ObjectStructure - may either be a composite or a collection such as a list or a set of objects that are visited by the visitor
+
+```cpp
+// Visitor
+struct SecurityVisitor {
+  virtual void visit_stock (Stock *) = 0;
+  virtual void visit_bond (Bond *) = 0;
+};
+```
+
+```cpp
+struct Security {
+  virtual void accept (SecurityVisitor * sv) = 0;
+};
+```
+
+```cpp
+// Concrete elements
+void Stock::accept (SecurityVisitor * sv) {
+    if (sv) {sv->visit_stock(this);} // Delegation by passing 'this'
+}
+
+void Bond::accept (SecurityVisitor * sv){
+  if (sv) {sv->visit_bond(this);}
+}
+```
+
+```cpp
+struct ProjectedValueFunctor : public SecurityVisitor {
+  int & value_;
+
+  ProjectedValueFunctor (int & value);
+
+  virtual ~ProjectedValueFunctor ();
+
+  void operator () (Security * s) {
+    s->accept(this);
+    }
+
+  virtual void visit_stock (Stock * s) {
+    if (s) {
+        value_ += s->shares_ * (s->projected_value_ + s->dividend_);
+        }
+    }
+
+  virtual void visit_bond (Bond * b) {
+      if (b) {
+          value_ += b->shares_ * (b->projected_value_ + b->interest_);
+        }
+    }
+}
+```
+
+## Observer Pattern
+
+Need to update multiple objects when the state of one objects changes.
+
+- Usually used in UI applications.
+
+## Interaction Diagrams
+
+![Observer Pattern UMT](./assets/observer-pattern-omt.png)
+
+- Vertical line for each object involved in the pattern.
+- Y - axis represents **time** from top 0 and increasing.
+- Straight line means idle object.
+- Horizontal lines are **requests** with arrows.
