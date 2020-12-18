@@ -278,3 +278,65 @@ Need to update multiple objects when the state of one objects changes.
 - Y - axis represents **time** from top 0 and increasing.
 - Straight line means idle object.
 - Horizontal lines are **requests** with arrows.
+
+# Structual Design Patterns
+
+Identify simple ways to realize relationships between objects. Focused on defining fixed structural relationships between objects.
+
+## Composite Pattern
+
+Composite object: An object composed of zero or more objects, all exhibiting similar functionality. (defining same interface)
+
+**Motivation**: Allows tree-like structures containing composite and leaf objects. Simplifies code by allowing client code to interact with all objects (composite or leaf) indiscriminately.
+
+### Participants:
+
+1. Component - declares the interface for all components, including composites and leaves
+2. Composite - represents a component that may contain children. Component methods often defined by forwarding request to all children
+3. Leaf - represents a component without children
+4. Context (client) - interacts with a composite object using the interface
+   presented by “Component”.
+
+![Composite Pattern UMT](./assets/composite-pattern-omt.png)
+
+- _Component_ is an abstract base class.
+- Leaves do not override composite objects.
+
+  - Define abstract base class assuming it is a leaf node, override these functions in the composite classes.
+
+- Filled in circle represents 0 to many relationship. (UMT Tip)
+
+- Circle with dashes represents pseudo code.
+
+### A typical Composite Object
+
+![A typical composite object](./assets/typical-composite-object.png)
+
+## Proxy Pattern
+
+Provide a placeholder (proxy) for another object. The proxy controls access to the object.
+
+**Motivation**:
+
+- Provide a local copy of an object stored elsewhere(on disk, in a database, etc..). Provides a means for caching as well
+- Defer creation of an expensive object until it is needed
+- Control access to an object (ex: file permissions (lab 5), authentication)
+- Smart references
+
+**Participants**:
+
+- Proxy
+  - Maintains a pointer to a Subject
+  - Provides the same interface as Subject, allows proxy to be used in place of a Subject
+  - Controls access to or performs other bookkeeping functionality on the Subject
+- Subject
+  - Declares an interface shared by RealSubject and the Proxy
+- RealSubject
+  - The real object that a proxy represents. Defines the Subject interface.
+
+### Proxy Pattern OMT
+
+![!Proxy Pattern](./assets/proxy-pattern-umt.png)
+
+- Proxy defines its functions to forward request to the real subject.
+- Proxy can act as an authentication middleware.
