@@ -336,7 +336,47 @@ Provide a placeholder (proxy) for another object. The proxy controls access to t
 
 ### Proxy Pattern OMT
 
-![!Proxy Pattern](./assets/proxy-pattern-umt.png)
+![Proxy Pattern](./assets/proxy-pattern-umt.png)
 
 - Proxy defines its functions to forward request to the real subject.
 - Proxy can act as an authentication middleware.
+
+# The Command Pattern
+
+### Intent
+
+Encapsulate a request/action as a command object.
+
+- Client can then be parameterized with different commands
+- Commands can be logged
+- Commands can be undone (if needed)
+
+**Applicability**: Use the command pattern when you need to:
+
+- Parameterize a client with different commands, client is unaware of the specific command it is executing
+- Queue commands and execute them at a later time, or even send commands to a different process to execute
+- Support undoable operations
+- Support logging of commands, allows a system to be restored by replaying the commands
+
+![Command Pattern OMT](./assets/command-pattern-omt.png)
+
+- Command - declares the interface for executing a command
+- ConcreteCommand - configured with a Receiver object, Receiver is used to execute the command (Execute()) as defined by the concrete command
+- Client - creates a command object and configures it with a Receiver
+- Invoker - invokes the command, asks the command to carry out an action
+- Receiver - knows how to perform the operations required to carry out a command, as defined by a concrete command object
+
+### Behavioral Representation
+
+![Behavioral Representation](./assets/command-bhv.png)
+
+1. Client creates a ConcreteCommand object, sets its Receiver
+2. Client configures an Invoker with the command
+3. Invoker issues an action by calling Execute on the command object
+4. ConcreteCommand object carries out the action by calling operations on the Receiver
+
+## Macro Commands
+
+- Use the composite pattern to construct complex commands by stringing together a series of primitive commands.
+
+![Macro Command](./assets/macro-cmd.png)
